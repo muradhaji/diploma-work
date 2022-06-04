@@ -1,0 +1,21 @@
+.inner {
+  height: 100%;
+  width: 100%;
+  display: flex;
+}
+
+/* .collapse_container {
+} */
+
+.collapse_icon {
+  padding: 0 24px;
+  font-size: 18px;
+  line-height: 64px;
+  cursor: pointer;
+  transition: color 0.3s;
+  vertical-align: 0;
+}
+
+.collapse_icon:hover {
+  color: #1890ff;
+}
