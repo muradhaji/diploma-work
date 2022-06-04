@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 // import PropTypes from 'prop-types';
 import styles from './Footer.module.css';
 
@@ -12,4 +12,4 @@ const Footer = (props) => {
 
 Footer.propTypes = {};
 
-export default Footer;
+export default memo(Footer);
