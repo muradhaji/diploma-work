@@ -1,0 +1,37 @@
+@import url('normalize');
+
+:root {
+  --blue-palette-1: #caf0f8;
+  --blue-palette-2: #ade8f4;
+  --blue-palette-3: #90e0ef;
+  --blue-palette-4: #48cae4;
+  --blue-palette-5: #00b4d8;
+  --blue-palette-6: #0096c7;
+  --blue-palette-7: #0077b6;
+  --blue-palette-8: #023e8a;
+  --blue-palette-9: #03045e;
+  --black-palette-1: #f8f9fa;
+  --black-palette-2: #e9ecef;
+  --black-palette-3: #dee2e6;
+  --black-palette-4: #ced4da;
+  --black-palette-5: #adb5bd;
+  --black-palette-6: #6c757d;
+  --black-palette-7: #495057;
+  --black-palette-8: #343a40;
+  --black-palette-9: #212529;
+}
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: var(--black-palette-1);
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
