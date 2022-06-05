@@ -29,6 +29,7 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   background-color: var(--black-palette-1);
+  color: var(--black-palette-9);
 }
 
 code {

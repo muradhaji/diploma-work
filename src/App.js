@@ -1,5 +1,7 @@
 import { Suspense } from 'react';
+import { BrowserRouter } from 'react-router-dom';
 import './App.css';
+import Layout from './components/Layout';
 import Loader from './components/Loader';
 
 function App() {
@@ -14,7 +16,11 @@ function App() {
           color='6'
         />
       }
-    ></Suspense>
+    >
+      <BrowserRouter>
+        <Layout />
+      </BrowserRouter>
+    </Suspense>
   );
 }
 
