@@ -1,6 +1,7 @@
 @import url('normalize');
 
 :root {
+  /* Blue palette url: https://coolors.co/palette/03045e-023e8a-0077b6-0096c7-00b4d8-48cae4-90e0ef-ade8f4-caf0f8 */
   --blue-palette-1: #caf0f8;
   --blue-palette-2: #ade8f4;
   --blue-palette-3: #90e0ef;
@@ -10,6 +11,7 @@
   --blue-palette-7: #0077b6;
   --blue-palette-8: #023e8a;
   --blue-palette-9: #03045e;
+  /* Black palette url: https://coolors.co/palette/f8f9fa-e9ecef-dee2e6-ced4da-adb5bd-6c757d-495057-343a40-212529 */
   --black-palette-1: #f8f9fa;
   --black-palette-2: #e9ecef;
   --black-palette-3: #dee2e6;
