@@ -10,7 +10,7 @@ const Sider = ({ collapsed }) => {
 
   const { pathname } = useLocation();
 
-  const [menuSelectedKeys, setMenuSelectedKeys] = useState(['teachers']);
+  const [menuSelectedKeys, setMenuSelectedKeys] = useState(['/teachers']);
 
   const menuItems = [
     { key: '/teachers', icon: <TeamOutlined />, label: 'Müəllimlər' },
@@ -18,7 +18,11 @@ const Sider = ({ collapsed }) => {
   ];
 
   useEffect(() => {
-    setMenuSelectedKeys([pathname]);
+    if (pathname === '/') {
+      setMenuSelectedKeys(['/teachers']);
+    } else {
+      setMenuSelectedKeys([pathname]);
+    }
   }, [pathname]);
 
   const onMenuSelect = (values) => {
