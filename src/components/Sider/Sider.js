@@ -1,7 +1,7 @@
 import { Menu } from 'antd';
 import React, { memo, useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { TeamOutlined, FileOutlined } from '@ant-design/icons';
+import { TeamOutlined, FileOutlined, SettingOutlined } from '@ant-design/icons';
 import PropTypes from 'prop-types';
 import styles from './Sider.module.css';
 
@@ -14,7 +14,22 @@ const Sider = ({ collapsed }) => {
 
   const menuItems = [
     { key: '/teachers', icon: <TeamOutlined />, label: 'Müəllimlər' },
-    { key: '/works', icon: <FileOutlined />, label: 'Elmi işlər' },
+    { key: '/articles', icon: <FileOutlined />, label: 'Məqalələr' },
+    {
+      key: '/professions',
+      icon: <SettingOutlined />,
+      label: 'İxtisaslar',
+    },
+    {
+      key: '/article-types',
+      icon: <SettingOutlined />,
+      label: 'Məqalə tipləri',
+    },
+    {
+      key: '/subjects',
+      icon: <SettingOutlined />,
+      label: 'Fənnlər',
+    },
   ];
 
   useEffect(() => {

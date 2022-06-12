@@ -1,3 +1,17 @@
+/* Antd Table Customization Begin */
+.table-row-dark {
+  background-color: var(--black-palette-2) !important;
+}
+.table-row-dark .ant-table-cell-fix-left,
+.table-row-dark .ant-table-cell-fix-right {
+  background-color: var(--black-palette-2) !important;
+}
+
+.table-row-dark:hover > td {
+  background-color: var(--black-palette-2) !important;
+}
+/* Antd Table Customization End */
+
 /* Utils Begin */
 
 /* Hide scrollbar for Chrome, Safari and Opera */
