@@ -5,20 +5,22 @@ import useModalStatus from '../../../Hooks/useModalStatus';
 import { connect } from 'react-redux';
 import { bindActionCreators } from '@reduxjs/toolkit';
 import { normalizeFilterData } from '../../../helperFunctions';
-import { getFilteredSubjectsData } from '../../../Redux/Slices/SubjectSlice';
+import { getFilteredArticleTypesData } from '../../../Redux/Slices/ArticleTypeSlice';
 // import PropTypes from 'prop-types';
 // import styles from './FilterModal.module.css';
 
-const FilterModal = ({ SubjectSlice, getFilteredSubjectsData }) => {
-  const { loading: getFilteredSubjectsDataLoading = false } =
-    SubjectSlice || {};
+const FilterModal = ({ ArticleTypeSlice, getFilteredArticleTypesData }) => {
+  const { loading: getFilteredArticleTypesDataLoading = false } =
+    ArticleTypeSlice || {};
 
-  const { visible = false, hideModal } = useModalStatus(MODALS.SUBJECT_FILTER);
+  const { visible = false, hideModal } = useModalStatus(
+    MODALS.ARTICLE_TYPE_FILTER
+  );
 
   const [form] = Form.useForm();
 
   const handleFinish = (values) => {
-    getFilteredSubjectsData(normalizeFilterData(values));
+    getFilteredArticleTypesData(normalizeFilterData(values));
   };
 
   const handleCancel = () => {
@@ -29,18 +31,22 @@ const FilterModal = ({ SubjectSlice, getFilteredSubjectsData }) => {
     <Modal
       centered
       visible={visible}
-      title='Fənn filterləri'
+      title='Məqalə tipi filterləri'
       okText='Təsdiqlə'
       cancelText='Çıx'
       okButtonProps={{
-        loading: getFilteredSubjectsDataLoading,
-        form: MODALS.SUBJECT_FILTER,
+        loading: getFilteredArticleTypesDataLoading,
+        form: MODALS.ARTICLE_TYPE_FILTER,
         htmlType: 'submit',
       }}
       onCancel={handleCancel}
       destroyOnClose
     >
-      <Form form={form} name={MODALS.SUBJECT_FILTER} onFinish={handleFinish}>
+      <Form
+        form={form}
+        name={MODALS.ARTICLE_TYPE_FILTER}
+        onFinish={handleFinish}
+      >
         <Form.Item label='Ad' name='adi'>
           <Input />
         </Form.Item>
@@ -52,9 +58,9 @@ const FilterModal = ({ SubjectSlice, getFilteredSubjectsData }) => {
 FilterModal.propTypes = {};
 
 const mapStateToProps = (state) => {
-  const { subjects: SubjectSlice = null } = state || {};
+  const { articleTypes: ArticleTypeSlice = null } = state || {};
   return {
-    SubjectSlice,
+    ArticleTypeSlice,
   };
 };
 
@@ -62,7 +68,7 @@ const mapDispatchToProps = (dispatch) => {
   return {
     ...bindActionCreators(
       {
-        getFilteredSubjectsData,
+        getFilteredArticleTypesData,
       },
       dispatch
     ),

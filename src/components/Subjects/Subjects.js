@@ -20,8 +20,8 @@ import DeleteModal from './DeleteModal';
 const Subjects = ({
   SubjectSlice,
   openModal,
-  getSubjectsData,
   setSelectedSubject,
+  getSubjectsData,
 }) => {
   const { data: subjectsData = null, loading: getSubjectsDataLoading = false } =
     SubjectSlice || {};

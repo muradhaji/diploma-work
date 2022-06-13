@@ -3,28 +3,29 @@ import { Button, Empty, Space, Table, Tooltip } from 'antd';
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import { MODALS } from '../../constants';
 import PageLayout from '../PageLayout';
+import { openModal } from '../../Redux/Slices/ModalSlice';
 import {
-  toggleModal,
-  openModal,
-  closeModal,
-} from '../../Redux/Slices/ModalSlice';
-import { getArticleTypesData } from '../../Redux/Slices/ArticleTypeSlice';
+  getArticleTypesData,
+  setSelectedArticleType,
+} from '../../Redux/Slices/ArticleTypeSlice';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import FilterModal from './FilterModal';
+import CreateModal from './CreateModal';
+import UpdateModal from './UpdateModal';
+import DeleteModal from './DeleteModal';
 // import PropTypes from 'prop-types';
 // import styles from './ArticleTypes.module.css';
 
 const Articles = ({
   ArticleTypeSlice,
-  toggleModal,
   openModal,
-  closeModal,
+  setSelectedArticleType,
   getArticleTypesData,
 }) => {
   const {
-    data: articleTypesData,
-    loading: getArticleTypesDataLoading,
-    // error,
+    data: articleTypesData = null,
+    loading: getArticleTypesDataLoading = false,
   } = ArticleTypeSlice || {};
 
   useEffect(() => {
@@ -48,13 +49,16 @@ const Articles = ({
     {
       key: 'actions',
       title: 'Düymələr',
-      render: ({ id }) => (
+      render: (record) => (
         <Space>
           <Tooltip title='Redaktə et'>
             <Button
               type='primary'
               icon={<EditOutlined />}
-              onClick={() => console.log(`Edit article type: ${id}`)}
+              onClick={() => {
+                setSelectedArticleType(record);
+                openModal(MODALS.ARTICLE_TYPE_EDIT);
+              }}
             />
           </Tooltip>
           <Tooltip title='Sil'>
@@ -62,7 +66,10 @@ const Articles = ({
               type='primary'
               danger
               icon={<DeleteOutlined />}
-              onClick={() => console.log(`Delete article type: ${id}`)}
+              onClick={() => {
+                setSelectedArticleType(record);
+                openModal(MODALS.ARTICLE_TYPE_DELETE);
+              }}
             />
           </Tooltip>
         </Space>
@@ -86,13 +93,13 @@ const Articles = ({
     <>
       <Button
         type='primary'
-        onClick={() => toggleModal(MODALS.ARTICLE_TYPE_FILTER)}
+        onClick={() => openModal(MODALS.ARTICLE_TYPE_FILTER)}
       >
         Filterlə
       </Button>
       <Button
         type='primary'
-        onClick={() => toggleModal(MODALS.ARTICLE_TYPE_CREATE)}
+        onClick={() => openModal(MODALS.ARTICLE_TYPE_CREATE)}
       >
         Əlavə et
       </Button>
@@ -101,6 +108,10 @@ const Articles = ({
 
   const pageContent = (
     <>
+      <FilterModal />
+      <CreateModal />
+      <UpdateModal />
+      <DeleteModal />
       <Table
         bordered
         size='small'
@@ -141,9 +152,8 @@ const mapDispatchToProps = (dispatch) => {
   return {
     ...bindActionCreators(
       {
-        toggleModal,
         openModal,
-        closeModal,
+        setSelectedArticleType,
         getArticleTypesData,
       },
       dispatch
