@@ -1,7 +1,6 @@
 import { Form, Input, Modal } from 'antd';
 import React, { memo, useEffect } from 'react';
 import { MODALS } from '../../../constants';
-import { closeModal } from '../../../Redux/Slices/ModalSlice';
 import useModalStatus from '../../../Hooks/useModalStatus';
 import { connect } from 'react-redux';
 import { bindActionCreators } from '@reduxjs/toolkit';
@@ -10,57 +9,57 @@ import { updateSubject } from '../../../Redux/Slices/SubjectSlice';
 // import PropTypes from 'prop-types';
 // import styles from './UpdateModal.module.css';
 
-const CreateModal = ({ SubjectSlice, closeModal, updateSubject }) => {
-  const { updateLoading, selectedSubject = null } = SubjectSlice || {};
+const CreateModal = ({ SubjectSlice, updateSubject }) => {
+  const { updateLoading = false, selectedSubject = null } = SubjectSlice || {};
 
-  const isVisible = useModalStatus(MODALS.SUBJECTS_EDIT);
+  const { id: selectedId = null, adi: selectedName = '' } =
+    selectedSubject || {};
+
+  const { visible = false, hideModal } = useModalStatus(MODALS.SUBJECT_EDIT);
 
   useEffect(() => {
-    if (isVisible && selectedSubject) {
-      const { adi } = selectedSubject || {};
-      form.setFieldsValue({ adi });
+    if (visible && selectedSubject) {
+      form.setFieldsValue({ adi: selectedName });
     }
     // eslint-disable-next-line
-  }, [isVisible]);
+  }, [visible]);
 
   const [form] = Form.useForm();
 
-  const handleOk = () => {
-    const { id } = selectedSubject || {};
-    if (id) {
-      updateSubject(id, normalizeFilterData(form.getFieldsValue()));
+  const handleFinish = (values) => {
+    if (selectedSubject) {
+      updateSubject(selectedId, normalizeFilterData(values));
     }
   };
 
   const handleCancel = () => {
-    closeModal(MODALS.SUBJECTS_EDIT);
+    hideModal();
     form.resetFields();
   };
 
   return (
     <Modal
       centered
-      visible={isVisible}
+      visible={visible}
       title='Fənni redaktə etmək'
       okText='Təsdiqlə'
       cancelText='Çıx'
-      okButtonProps={{ loading: updateLoading }}
-      onOk={handleOk}
+      okButtonProps={{
+        loading: updateLoading,
+        form: MODALS.SUBJECT_EDIT,
+        htmlType: 'submit',
+      }}
       onCancel={handleCancel}
-      width='50%'
-      // bodyStyle={{
-      //   overflowY: 'scroll',
-      //   height: 'calc(100vh -  210px)',
-      // }}
       destroyOnClose
     >
-      <Form
-        form={form}
-        // labelCol={{ span: 8 }}
-        // wrapperCol={{ span: 16 }}
-        labelAlign='left'
-      >
-        <Form.Item label='Ad' name='adi'>
+      <Form form={form} name={MODALS.SUBJECT_EDIT} onFinish={handleFinish}>
+        <Form.Item
+          label='Ad'
+          name='adi'
+          rules={[
+            { required: true, message: 'Bu sahə mütləq doldurulmalıdır!' },
+          ]}
+        >
           <Input />
         </Form.Item>
       </Form>
@@ -81,7 +80,6 @@ const mapDispatchToProps = (dispatch) => {
   return {
     ...bindActionCreators(
       {
-        closeModal,
         updateSubject,
       },
       dispatch

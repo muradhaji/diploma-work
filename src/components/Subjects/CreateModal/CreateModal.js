@@ -1,7 +1,6 @@
 import { Form, Input, Modal } from 'antd';
 import React, { memo } from 'react';
 import { MODALS } from '../../../constants';
-import { closeModal } from '../../../Redux/Slices/ModalSlice';
 import useModalStatus from '../../../Hooks/useModalStatus';
 import { connect } from 'react-redux';
 import { bindActionCreators } from '@reduxjs/toolkit';
@@ -10,48 +9,49 @@ import { createSubject } from '../../../Redux/Slices/SubjectSlice';
 // import PropTypes from 'prop-types';
 // import styles from './CreateModal.module.css';
 
-const CreateModal = ({ SubjectSlice, closeModal, createSubject }) => {
-  const { createLoading } = SubjectSlice || {};
+const CreateModal = ({ SubjectSlice, createSubject }) => {
+  const { createLoading = false } = SubjectSlice || {};
 
-  const isVisible = useModalStatus(MODALS.SUBJECTS_CREATE);
+  const { visible = false, hideModal } = useModalStatus(MODALS.SUBJECT_CREATE);
 
   const [form] = Form.useForm();
 
-  const handleOk = () => {
-    createSubject(normalizeFilterData(form.getFieldsValue()));
+  const handleFinish = (values) => {
+    createSubject(normalizeFilterData(values));
   };
 
   const handleCancel = () => {
-    closeModal(MODALS.SUBJECTS_CREATE);
+    hideModal();
+  };
+
+  const afterClose = () => {
+    form.resetFields();
   };
 
   return (
     <Modal
       centered
-      visible={isVisible}
+      visible={visible}
       title='Fənn əlavə etmək'
       okText='Təsdiqlə'
       cancelText='Çıx'
-      okButtonProps={{ loading: createLoading }}
-      onOk={handleOk}
-      onCancel={handleCancel}
-      width='50%'
-      // bodyStyle={{
-      //   overflowY: 'scroll',
-      //   height: 'calc(100vh -  210px)',
-      // }}
-      destroyOnClose
-      afterClose={() => {
-        form.resetFields();
+      okButtonProps={{
+        loading: createLoading,
+        form: MODALS.SUBJECT_CREATE,
+        htmlType: 'submit',
       }}
+      onCancel={handleCancel}
+      afterClose={afterClose}
+      destroyOnClose
     >
-      <Form
-        form={form}
-        // labelCol={{ span: 8 }}
-        // wrapperCol={{ span: 16 }}
-        labelAlign='left'
-      >
-        <Form.Item label='Ad' name='adi'>
+      <Form form={form} name={MODALS.SUBJECT_CREATE} onFinish={handleFinish}>
+        <Form.Item
+          label='Ad'
+          name='adi'
+          rules={[
+            { required: true, message: 'Bu sahə mütləq doldurulmalıdır!' },
+          ]}
+        >
           <Input />
         </Form.Item>
       </Form>
@@ -72,7 +72,6 @@ const mapDispatchToProps = (dispatch) => {
   return {
     ...bindActionCreators(
       {
-        closeModal,
         createSubject,
       },
       dispatch

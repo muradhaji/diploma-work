@@ -3,29 +3,28 @@ import { Button, Empty, Space, Table, Tooltip } from 'antd';
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import { MODALS } from '../../constants';
 import PageLayout from '../PageLayout';
+import { openModal } from '../../Redux/Slices/ModalSlice';
 import {
-  toggleModal,
-  openModal,
-  closeModal,
-} from '../../Redux/Slices/ModalSlice';
-import { getSubjectsData } from '../../Redux/Slices/SubjectSlice';
+  getSubjectsData,
+  setSelectedSubject,
+} from '../../Redux/Slices/SubjectSlice';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import FilterModal from './FilterModal';
+import CreateModal from './CreateModal';
+import UpdateModal from './UpdateModal';
+import DeleteModal from './DeleteModal';
 // import PropTypes from 'prop-types';
 // import styles from './Subjects.module.css';
 
 const Subjects = ({
   SubjectSlice,
-  toggleModal,
   openModal,
-  closeModal,
   getSubjectsData,
+  setSelectedSubject,
 }) => {
-  const {
-    data: subjectsData,
-    loading: getSubjectsDataLoading,
-    // error,
-  } = SubjectSlice || {};
+  const { data: subjectsData = null, loading: getSubjectsDataLoading = false } =
+    SubjectSlice || {};
 
   useEffect(() => {
     getSubjectsData();
@@ -48,13 +47,16 @@ const Subjects = ({
     {
       key: 'actions',
       title: 'Düymələr',
-      render: ({ id }) => (
+      render: (record) => (
         <Space>
           <Tooltip title='Redaktə et'>
             <Button
               type='primary'
               icon={<EditOutlined />}
-              onClick={() => console.log(`Edit subject: ${id}`)}
+              onClick={() => {
+                setSelectedSubject(record);
+                openModal(MODALS.SUBJECT_EDIT);
+              }}
             />
           </Tooltip>
           <Tooltip title='Sil'>
@@ -62,7 +64,10 @@ const Subjects = ({
               type='primary'
               danger
               icon={<DeleteOutlined />}
-              onClick={() => console.log(`Delete subject: ${id}`)}
+              onClick={() => {
+                setSelectedSubject(record);
+                openModal(MODALS.SUBJECT_DELETE);
+              }}
             />
           </Tooltip>
         </Space>
@@ -84,16 +89,10 @@ const Subjects = ({
 
   const pageButtons = (
     <>
-      <Button
-        type='primary'
-        onClick={() => toggleModal(MODALS.SUBJECTS_FILTER)}
-      >
+      <Button type='primary' onClick={() => openModal(MODALS.SUBJECT_FILTER)}>
         Filterlə
       </Button>
-      <Button
-        type='primary'
-        onClick={() => toggleModal(MODALS.SUBJECTS_TYPE_CREATE)}
-      >
+      <Button type='primary' onClick={() => openModal(MODALS.SUBJECT_CREATE)}>
         Əlavə et
       </Button>
     </>
@@ -101,6 +100,10 @@ const Subjects = ({
 
   const pageContent = (
     <>
+      <FilterModal />
+      <CreateModal />
+      <UpdateModal />
+      <DeleteModal />
       <Table
         bordered
         size='small'
@@ -141,9 +144,8 @@ const mapDispatchToProps = (dispatch) => {
   return {
     ...bindActionCreators(
       {
-        toggleModal,
         openModal,
-        closeModal,
+        setSelectedSubject,
         getSubjectsData,
       },
       dispatch

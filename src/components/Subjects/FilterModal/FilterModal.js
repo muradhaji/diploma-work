@@ -1,53 +1,46 @@
 import { Form, Input, Modal } from 'antd';
 import React, { memo } from 'react';
 import { MODALS } from '../../../constants';
-import { closeModal } from '../../../Redux/Slices/ModalSlice';
 import useModalStatus from '../../../Hooks/useModalStatus';
 import { connect } from 'react-redux';
 import { bindActionCreators } from '@reduxjs/toolkit';
 import { normalizeFilterData } from '../../../helperFunctions';
-import { getSubjectsData } from '../../../Redux/Slices/SubjectSlice';
+import { getFilteredSubjectsData } from '../../../Redux/Slices/SubjectSlice';
 // import PropTypes from 'prop-types';
 // import styles from './FilterModal.module.css';
 
-const FilterModal = ({ SubjectSlice, closeModal, getSubjectsData }) => {
-  const { loading: getSubjectsDataLoading } = SubjectSlice || {};
+const FilterModal = ({ SubjectSlice, getFilteredSubjectsData }) => {
+  const { loading: getFilteredSubjectsDataLoading = false } =
+    SubjectSlice || {};
 
-  const isVisible = useModalStatus(MODALS.SUBJECTS_FILTER);
+  const { visible = false, hideModal } = useModalStatus(MODALS.SUBJECT_FILTER);
 
   const [form] = Form.useForm();
 
-  const handleOk = () => {
-    getSubjectsData(normalizeFilterData(form.getFieldsValue()));
+  const handleFinish = (values) => {
+    getFilteredSubjectsData(normalizeFilterData(values));
   };
 
   const handleCancel = () => {
-    closeModal(MODALS.SUBJECTS_FILTER);
+    hideModal();
   };
 
   return (
     <Modal
       centered
-      visible={isVisible}
+      visible={visible}
       title='Fənn filterləri'
       okText='Təsdiqlə'
       cancelText='Çıx'
-      okButtonProps={{ loading: getSubjectsDataLoading }}
-      onOk={handleOk}
+      okButtonProps={{
+        loading: getFilteredSubjectsDataLoading,
+        form: MODALS.SUBJECT_CREATE,
+        htmlType: 'submit',
+      }}
       onCancel={handleCancel}
-      width='50%'
-      // bodyStyle={{
-      //   overflowY: 'scroll',
-      //   height: 'calc(100vh -  210px)',
-      // }}
       destroyOnClose
     >
-      <Form
-        form={form}
-        // labelCol={{ span: 8 }}
-        // wrapperCol={{ span: 16 }}
-        labelAlign='left'
-      >
+      <Form form={form} name={MODALS.SUBJECT_CREATE} onFinish={handleFinish}>
         <Form.Item label='Ad' name='adi'>
           <Input />
         </Form.Item>
@@ -69,8 +62,7 @@ const mapDispatchToProps = (dispatch) => {
   return {
     ...bindActionCreators(
       {
-        closeModal,
-        getSubjectsData,
+        getFilteredSubjectsData,
       },
       dispatch
     ),
