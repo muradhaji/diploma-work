@@ -3,18 +3,20 @@ import { Button, Empty, Space, Table, Tooltip } from 'antd';
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import { MODALS, STATICS } from './../../constants';
 import PageLayout from '../PageLayout';
+import { openModal } from '../../Redux/Slices/ModalSlice';
 import {
-  toggleModal,
-  openModal,
-  closeModal,
-} from '../../Redux/Slices/ModalSlice';
-import { getTeachersData } from '../../Redux/Slices/TeacherSlice';
+  getTeachersData,
+  setSelectedTeacher,
+} from '../../Redux/Slices/TeacherSlice';
 import { getSubjectsData } from '../../Redux/Slices/SubjectSlice';
 import { getProfessionsData } from '../../Redux/Slices/ProfessionSlice';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { find } from 'lodash';
 import FilterModal from './FilterModal';
+import CreateModal from './CreateModal';
+import UpdateModal from './UpdateModal';
+import DeleteModal from './DeleteModal';
 // import PropTypes from 'prop-types';
 // import styles from './Teachers.module.css';
 
@@ -22,29 +24,21 @@ const Teachers = ({
   TeacherSlice,
   SubjectSlice,
   ProfessionSlice,
-  toggleModal,
   openModal,
-  closeModal,
+  setSelectedTeacher,
   getTeachersData,
   getSubjectsData,
   getProfessionsData,
 }) => {
-  const {
-    data: teachersData,
-    loading: getTeachersDataLoading,
-    // error,
-  } = TeacherSlice || {};
+  const { data: teachersData = null, loading: getTeachersDataLoading = false } =
+    TeacherSlice || {};
+
+  const { data: subjectsData = null, loading: getSubjectsDataLoading = false } =
+    SubjectSlice || {};
 
   const {
-    data: subjectsData,
-    loading: getSubjectsDataLoading,
-    // error,
-  } = SubjectSlice || {};
-
-  const {
-    data: professionsData,
-    loading: getProfessionsDataLoading,
-    // error,
+    data: professionsData = null,
+    loading: getProfessionsDataLoading = false,
   } = ProfessionSlice || {};
 
   useEffect(() => {
@@ -180,24 +174,27 @@ const Teachers = ({
       key: 'herbi_mukellefiyet',
       dataIndex: 'herbi_mukellefiyet',
       title: 'Hərbi mükəlləfiyyət',
-      render: (data) => (data ? 'He' : 'Yox'),
+      render: (data) => (data ? 'Hə' : 'Yox'),
     },
     {
       key: 'elmi_meqalelerin_sayi',
       dataIndex: 'elmi_meqalelerin_sayi',
-      title: 'Elmi məqalələrin sayı',
+      title: 'Elmi Tİ-lərinin sayı',
     },
     {
       key: 'actions',
       title: 'Düymələr',
       fixed: 'right',
-      render: ({ id }) => (
+      render: (record) => (
         <Space>
           <Tooltip title='Redaktə et'>
             <Button
               type='primary'
               icon={<EditOutlined />}
-              onClick={() => console.log(`Edit teacher: ${id}`)}
+              onClick={() => {
+                setSelectedTeacher(record);
+                openModal(MODALS.TEACHER_EDIT);
+              }}
             />
           </Tooltip>
           <Tooltip title='Sil'>
@@ -205,7 +202,10 @@ const Teachers = ({
               type='primary'
               danger
               icon={<DeleteOutlined />}
-              onClick={() => console.log(`Delete teacher: ${id}`)}
+              onClick={() => {
+                setSelectedTeacher(record);
+                openModal(MODALS.TEACHER_DELETE);
+              }}
             />
           </Tooltip>
         </Space>
@@ -239,6 +239,9 @@ const Teachers = ({
   const pageContent = (
     <>
       <FilterModal />
+      <CreateModal />
+      <UpdateModal />
+      <DeleteModal />
       <Table
         bordered
         size='small'
@@ -290,9 +293,8 @@ const mapDispatchToProps = (dispatch) => {
   return {
     ...bindActionCreators(
       {
-        toggleModal,
         openModal,
-        closeModal,
+        setSelectedTeacher,
         getTeachersData,
         getSubjectsData,
         getProfessionsData,

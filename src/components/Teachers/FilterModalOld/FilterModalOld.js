@@ -1,144 +1,138 @@
 import { DatePicker, Form, Input, Modal, Radio, Select } from 'antd';
 import React, { memo } from 'react';
 import { MODALS, STATICS } from '../../../constants';
+import { closeModal } from '../../../Redux/Slices/ModalSlice';
 import useModalStatus from '../../../Hooks/useModalStatus';
 import { connect } from 'react-redux';
 import { bindActionCreators } from '@reduxjs/toolkit';
+import { getTeachersData } from '../../../Redux/Slices/TeacherSlice';
 import { normalizeFilterData } from '../../../helperFunctions';
-import { getFilteredTeachersData } from '../../../Redux/Slices/TeacherSlice';
 import { map } from 'lodash';
 // import PropTypes from 'prop-types';
 // import styles from './FilterModal.module.css';
 
 const FilterModal = ({
-  TeacherSlice,
   SubjectSlice,
   ProfessionSlice,
-  getFilteredTeachersData,
+  closeModal,
+  getTeachersData,
 }) => {
-  const { loading: getFilteredTeachersDataLoading = false } =
-    TeacherSlice || {};
-
-  const { data: subjectsData = null, loading: getSubjectsDataLoading = false } =
-    SubjectSlice || {};
+  const {
+    data: subjectsData,
+    loading: getSubjectsDataLoading,
+    // error,
+  } = SubjectSlice || {};
 
   const {
-    data: professionsData = null,
-    loading: getProfessionsDataLoading = false,
+    data: professionsData,
+    loading: getProfessionsDataLoading,
+    // error,
   } = ProfessionSlice || {};
 
-  const { visible = false, hideModal } = useModalStatus(MODALS.TEACHER_FILTER);
+  const { visible: isVisible = false } = useModalStatus(MODALS.TEACHER_FILTER);
 
   const [form] = Form.useForm();
 
-  const handleFinish = (values) => {
-    getFilteredTeachersData(normalizeFilterData(values));
+  const handleOk = () => {
+    getTeachersData(normalizeFilterData(form.getFieldsValue()));
+    closeModal(MODALS.TEACHER_FILTER);
   };
 
   const handleCancel = () => {
-    hideModal();
+    closeModal(MODALS.TEACHER_FILTER);
   };
 
   return (
     <Modal
       centered
-      visible={visible}
+      visible={isVisible}
       title='Filterləmək'
-      okText='Təsdiqlə'
+      okText='Filterlə'
       cancelText='Çıx'
-      okButtonProps={{
-        loading: getFilteredTeachersDataLoading,
-        form: MODALS.TEACHER_FILTER,
-        htmlType: 'submit',
-      }}
+      onOk={handleOk}
       onCancel={handleCancel}
-      destroyOnClose
-      width='50%'
+      okButtonProps={{ loading: getSubjectsDataLoading }}
+      width={700}
       bodyStyle={{
         overflowY: 'scroll',
         height: 'calc(100vh -  210px)',
       }}
+      destroyOnClose
     >
       <Form
         form={form}
-        name={MODALS.TEACHER_FILTER}
-        onFinish={handleFinish}
         labelCol={{ span: 8 }}
         wrapperCol={{ span: 16 }}
         labelAlign='left'
       >
         <Form.Item label='Ad' name='ad'>
-          <Input autoFocus allowClear />
+          <Input autoFocus />
         </Form.Item>
         <Form.Item label='Soyad' name='soyad'>
-          <Input allowClear />
+          <Input />
         </Form.Item>
         <Form.Item label='Ata adı' name='ata_adi'>
-          <Input allowClear />
+          <Input />
         </Form.Item>
         <Form.Item label='Cins' name='gender'>
-          <Select allowClear>
+          <Select>
             {map(STATICS.TEACHER.gender, (value, key) => (
               <Select.Option key={key}>{value}</Select.Option>
             ))}
           </Select>
         </Form.Item>
         <Form.Item label='Təhsil' name='tehsil'>
-          <Select allowClear>
+          <Select>
             {map(STATICS.TEACHER.tehsil, (value, key) => (
               <Select.Option key={key}>{value}</Select.Option>
             ))}
           </Select>
         </Form.Item>
         <Form.Item label='Elmi dərəcə' name='elmi_derece'>
-          <Select allowClear>
+          <Select>
             {map(STATICS.TEACHER.elmi_derece, (value, key) => (
               <Select.Option key={key}>{value}</Select.Option>
             ))}
           </Select>
         </Form.Item>
         <Form.Item label='Vəzifə' name='vezife'>
-          <Select allowClear>
+          <Select>
             {map(STATICS.TEACHER.vezife, (value, key) => (
               <Select.Option key={key}>{value}</Select.Option>
             ))}
           </Select>
         </Form.Item>
         <Form.Item label='Fənnlər' name='fenler'>
-          <Select mode='multiple' loading={getSubjectsDataLoading} allowClear>
+          <Select mode='multiple' loading={getSubjectsDataLoading}>
             {map(subjectsData, (subject) => (
               <Select.Option key={subject.id}>{subject.adi}</Select.Option>
             ))}
           </Select>
         </Form.Item>
         <Form.Item label='Bölmə' name='bolme'>
-          <Select allowClear>
+          <Select>
             {map(STATICS.TEACHER.bolme, (value, key) => (
               <Select.Option key={key}>{value}</Select.Option>
             ))}
           </Select>
         </Form.Item>
         <Form.Item label='Doğum tarixi' name='dogum_tarixi'>
-          <DatePicker
-            format='DD/MM/YYYY'
-            style={{ width: '100%' }}
-            allowClear
-          />
+          <DatePicker format='DD/MM/YYYY' style={{ width: '100%' }} />
         </Form.Item>
         <Form.Item label='Doğulduğu yer' name='doguldugu_yer'>
-          <Input allowClear />
+          <Input />
         </Form.Item>
         <Form.Item label='Qeydiyyatda yeri' name='qeydiyatda_oldugu_unvan'>
-          <Input allowClear />
+          <Input />
         </Form.Item>
         <Form.Item label='Yaşadığı yer' name='faktiki_yasaadigi_unvan'>
-          <Input allowClear />
+          <Input />
         </Form.Item>
         <Form.Item label='Bitirdiyi ali məktəb' name='bitirdiyi_universitet'>
-          <Input allowClear />
+          <Input />
         </Form.Item>
         <Form.Item label='İxtisas' name='ixtisas'>
-          <Select loading={getProfessionsDataLoading} allowClear>
+          <Select loading={getProfessionsDataLoading}>
             {map(professionsData, (profession) => (
               <Select.Option key={profession.id}>
                 #{profession.kod} {profession.ad}
@@ -147,17 +141,17 @@ const FilterModal = ({
           </Select>
         </Form.Item>
         <Form.Item label='Ailə vəziyyəti' name='aile_vezyeti'>
-          <Select allowClear>
+          <Select>
             {map(STATICS.TEACHER.aile_vezyeti, (value, key) => (
               <Select.Option key={key}>{value}</Select.Option>
             ))}
           </Select>
         </Form.Item>
         <Form.Item label='Partiya mənsubiyyəti' name='partiya_mensubiyeti'>
-          <Input allowClear />
+          <Input />
         </Form.Item>
         <Form.Item label='Əsas iş yeri' name='main_work'>
-          <Input allowClear />
+          <Input />
         </Form.Item>
         <Form.Item label='Hərbi mükəlləfiyyət' name='herbi_mukellefiyet'>
           <Radio.Group>
@@ -173,13 +167,9 @@ const FilterModal = ({
 FilterModal.propTypes = {};
 
 const mapStateToProps = (state) => {
-  const {
-    teachers: TeacherSlice = null,
-    subjects: SubjectSlice = null,
-    professions: ProfessionSlice = null,
-  } = state || {};
+  const { subjects: SubjectSlice = null, professions: ProfessionSlice = null } =
+    state || {};
   return {
-    TeacherSlice,
     SubjectSlice,
     ProfessionSlice,
   };
@@ -189,7 +179,8 @@ const mapDispatchToProps = (dispatch) => {
   return {
     ...bindActionCreators(
       {
-        getFilteredTeachersData,
+        closeModal,
+        getTeachersData,
       },
       dispatch
     ),
