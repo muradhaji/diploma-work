@@ -29,7 +29,7 @@ const FilterModal = ({
     // error,
   } = ProfessionSlice || {};
 
-  const isVisible = useModalStatus(MODALS.TEACHER_FILTER);
+  const { visible: isVisible = false } = useModalStatus(MODALS.TEACHER_FILTER);
 
   const [form] = Form.useForm();
 
@@ -66,7 +66,7 @@ const FilterModal = ({
         labelAlign='left'
       >
         <Form.Item label='Ad' name='ad'>
-          <Input />
+          <Input autoFocus />
         </Form.Item>
         <Form.Item label='Soyad' name='soyad'>
           <Input />

@@ -42,7 +42,7 @@ const FilterModal = ({ SubjectSlice, getFilteredSubjectsData }) => {
     >
       <Form form={form} name={MODALS.SUBJECT_FILTER} onFinish={handleFinish}>
         <Form.Item label='Ad' name='adi'>
-          <Input />
+          <Input autoFocus />
         </Form.Item>
       </Form>
     </Modal>

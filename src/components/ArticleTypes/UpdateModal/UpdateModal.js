@@ -63,7 +63,7 @@ const CreateModal = ({ ArticleTypeSlice, updateArticleType }) => {
             { required: true, message: 'Bu sahə mütləq doldurulmalıdır!' },
           ]}
         >
-          <Input />
+          <Input autoFocus />
         </Form.Item>
       </Form>
     </Modal>

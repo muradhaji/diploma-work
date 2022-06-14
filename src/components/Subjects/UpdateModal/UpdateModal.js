@@ -60,7 +60,7 @@ const CreateModal = ({ SubjectSlice, updateSubject }) => {
             { required: true, message: 'Bu sahə mütləq doldurulmalıdır!' },
           ]}
         >
-          <Input />
+          <Input autoFocus />
         </Form.Item>
       </Form>
     </Modal>

@@ -51,7 +51,7 @@ const FilterModal = ({ ProfessionSlice, getFilteredProfessionsData }) => {
         labelAlign='left'
       >
         <Form.Item label='Kod' name='kod'>
-          <Input />
+          <Input autoFocus />
         </Form.Item>
         <Form.Item label='Ad' name='ad'>
           <Input />

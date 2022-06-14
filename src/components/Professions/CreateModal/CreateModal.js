@@ -62,7 +62,7 @@ const CreateModal = ({ ProfessionSlice, createProfession }) => {
             { len: 6, message: 'İxtisas kodu 6 simvoldan ibarət olmalıdır!' },
           ]}
         >
-          <Input />
+          <Input autoFocus />
         </Form.Item>
         <Form.Item
           label='Ad'

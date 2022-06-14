@@ -48,7 +48,7 @@ const FilterModal = ({ ArticleTypeSlice, getFilteredArticleTypesData }) => {
         onFinish={handleFinish}
       >
         <Form.Item label='Ad' name='adi'>
-          <Input />
+          <Input autoFocus />
         </Form.Item>
       </Form>
     </Modal>
