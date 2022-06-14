@@ -2,22 +2,37 @@ export const API_URL = 'http://94.130.176.68:8070/api';
 
 export const APIS = {
   TEACHERS: '/teacher/',
-  SUBJECTS: '/fen/',
-  PROFESSIONS: '/ixtisas/',
   ARTICLES: '/meqale/',
+  PROFESSIONS: '/ixtisas/',
   ARTICLE_TYPES: '/meqale-tipi/',
+  SUBJECTS: '/fen/',
 };
 
 export const MESSAGES = {
-  SUBJECTS: {
-    CREATED_SUCCESSFULLY: 'Fənn uğurla yaradıldı.',
-    UPDATED_SUCCESSFULLY: 'Fənn uğurla redaktə edildi.',
-    DELETED_SUCCESSFULLY: 'Fənn uğurla silindi.',
+  TEACHERS: {
+    CREATED_SUCCESSFULLY: 'Müəllim uğurla yaradıldı.',
+    UPDATED_SUCCESSFULLY: 'Müəllim uğurla redaktə edildi.',
+    DELETED_SUCCESSFULLY: 'Müəllim uğurla silindi.',
+  },
+  ARTICLES: {
+    CREATED_SUCCESSFULLY: 'Məqalə uğurla yaradıldı.',
+    UPDATED_SUCCESSFULLY: 'Məqalə uğurla redaktə edildi.',
+    DELETED_SUCCESSFULLY: 'Məqalə uğurla silindi.',
+  },
+  PROFESSIONS: {
+    CREATED_SUCCESSFULLY: 'İxtisas uğurla yaradıldı.',
+    UPDATED_SUCCESSFULLY: 'İxtisas uğurla redaktə edildi.',
+    DELETED_SUCCESSFULLY: 'İxtisas uğurla silindi.',
   },
   ARTICLE_TYPES: {
     CREATED_SUCCESSFULLY: 'Məqalə tipi uğurla yaradıldı.',
     UPDATED_SUCCESSFULLY: 'Məqalə tipi uğurla redaktə edildi.',
     DELETED_SUCCESSFULLY: 'Məqalə tipi uğurla silindi.',
+  },
+  SUBJECTS: {
+    CREATED_SUCCESSFULLY: 'Fənn uğurla yaradıldı.',
+    UPDATED_SUCCESSFULLY: 'Fənn uğurla redaktə edildi.',
+    DELETED_SUCCESSFULLY: 'Fənn uğurla silindi.',
   },
 };
 

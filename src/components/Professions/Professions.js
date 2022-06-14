@@ -3,22 +3,22 @@ import { Button, Empty, Space, Table, Tooltip } from 'antd';
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import { MODALS } from '../../constants';
 import PageLayout from '../PageLayout';
-import {
-  toggleModal,
-  openModal,
-  closeModal,
-} from '../../Redux/Slices/ModalSlice';
+import { openModal } from '../../Redux/Slices/ModalSlice';
 import { getProfessionsData } from '../../Redux/Slices/ProfessionSlice';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import FilterModal from './FilterModal';
+import CreateModal from './CreateModal';
+import UpdateModal from './UpdateModal';
+import DeleteModal from './DeleteModal';
+import { setSelectedProfession } from '../../Redux/Slices/ProfessionSlice';
 // import PropTypes from 'prop-types';
 // import styles from './Professions.module.css';
 
 const Professions = ({
   ProfessionSlice,
-  toggleModal,
   openModal,
-  closeModal,
+  setSelectedProfession,
   getProfessionsData,
 }) => {
   const {
@@ -53,13 +53,16 @@ const Professions = ({
     {
       key: 'actions',
       title: 'Düymələr',
-      render: ({ id }) => (
+      render: (record) => (
         <Space>
           <Tooltip title='Redaktə et'>
             <Button
               type='primary'
               icon={<EditOutlined />}
-              onClick={() => console.log(`Edit profession: ${id}`)}
+              onClick={() => {
+                setSelectedProfession(record);
+                openModal(MODALS.PROFESSION_EDIT);
+              }}
             />
           </Tooltip>
           <Tooltip title='Sil'>
@@ -67,7 +70,10 @@ const Professions = ({
               type='primary'
               danger
               icon={<DeleteOutlined />}
-              onClick={() => console.log(`Delete profession: ${id}`)}
+              onClick={() => {
+                setSelectedProfession(record);
+                openModal(MODALS.PROFESSION_DELETE);
+              }}
             />
           </Tooltip>
         </Space>
@@ -91,13 +97,13 @@ const Professions = ({
     <>
       <Button
         type='primary'
-        onClick={() => toggleModal(MODALS.PROFESSION_FILTER)}
+        onClick={() => openModal(MODALS.PROFESSION_FILTER)}
       >
         Filterlə
       </Button>
       <Button
         type='primary'
-        onClick={() => toggleModal(MODALS.PROFESSION_CREATE)}
+        onClick={() => openModal(MODALS.PROFESSION_CREATE)}
       >
         Əlavə et
       </Button>
@@ -106,6 +112,10 @@ const Professions = ({
 
   const pageContent = (
     <>
+      <FilterModal />
+      <CreateModal />
+      <UpdateModal />
+      <DeleteModal />
       <Table
         bordered
         size='small'
@@ -146,9 +156,8 @@ const mapDispatchToProps = (dispatch) => {
   return {
     ...bindActionCreators(
       {
-        toggleModal,
         openModal,
-        closeModal,
+        setSelectedProfession,
         getProfessionsData,
       },
       dispatch

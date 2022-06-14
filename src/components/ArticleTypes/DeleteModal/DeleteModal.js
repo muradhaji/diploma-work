@@ -33,7 +33,7 @@ const CreateModal = ({ ArticleTypeSlice, deleteArticleType }) => {
     <Modal
       centered
       visible={visible}
-      title='Məqalə tipini silmək'
+      title='Silmək'
       okText='Təsdiqlə'
       cancelText='Çıx'
       okButtonProps={{ loading: deleteLoading }}

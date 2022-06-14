@@ -31,7 +31,7 @@ const FilterModal = ({ ArticleTypeSlice, getFilteredArticleTypesData }) => {
     <Modal
       centered
       visible={visible}
-      title='Məqalə tipi filterləri'
+      title='Filterləmək'
       okText='Təsdiqlə'
       cancelText='Çıx'
       okButtonProps={{

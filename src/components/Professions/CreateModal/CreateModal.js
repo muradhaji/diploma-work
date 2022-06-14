@@ -5,19 +5,21 @@ import useModalStatus from '../../../Hooks/useModalStatus';
 import { connect } from 'react-redux';
 import { bindActionCreators } from '@reduxjs/toolkit';
 import { normalizeFilterData } from '../../../helperFunctions';
-import { createSubject } from '../../../Redux/Slices/SubjectSlice';
+import { createProfession } from '../../../Redux/Slices/ProfessionSlice';
 // import PropTypes from 'prop-types';
 // import styles from './CreateModal.module.css';
 
-const CreateModal = ({ SubjectSlice, createSubject }) => {
-  const { createLoading = false } = SubjectSlice || {};
+const CreateModal = ({ ProfessionSlice, createProfession }) => {
+  const { createLoading = false } = ProfessionSlice || {};
 
-  const { visible = false, hideModal } = useModalStatus(MODALS.SUBJECT_CREATE);
+  const { visible = false, hideModal } = useModalStatus(
+    MODALS.PROFESSION_CREATE
+  );
 
   const [form] = Form.useForm();
 
   const handleFinish = (values) => {
-    createSubject(normalizeFilterData(values));
+    createProfession(normalizeFilterData(values));
   };
 
   const handleCancel = () => {
@@ -37,17 +39,34 @@ const CreateModal = ({ SubjectSlice, createSubject }) => {
       cancelText='Çıx'
       okButtonProps={{
         loading: createLoading,
-        form: MODALS.SUBJECT_CREATE,
+        form: MODALS.PROFESSION_CREATE,
         htmlType: 'submit',
       }}
       onCancel={handleCancel}
       afterClose={afterClose}
       destroyOnClose
     >
-      <Form form={form} name={MODALS.SUBJECT_CREATE} onFinish={handleFinish}>
+      <Form
+        form={form}
+        name={MODALS.PROFESSION_CREATE}
+        onFinish={handleFinish}
+        labelCol={{ span: 4 }}
+        wrapperCol={{ span: 20 }}
+        labelAlign='left'
+      >
+        <Form.Item
+          label='Kod'
+          name='kod'
+          rules={[
+            { required: true, message: 'Bu sahə mütləq doldurulmalıdır!' },
+            { len: 6, message: 'İxtisas kodu 6 simvoldan ibarət olmalıdır!' },
+          ]}
+        >
+          <Input />
+        </Form.Item>
         <Form.Item
           label='Ad'
-          name='adi'
+          name='ad'
           rules={[
             { required: true, message: 'Bu sahə mütləq doldurulmalıdır!' },
           ]}
@@ -62,9 +81,9 @@ const CreateModal = ({ SubjectSlice, createSubject }) => {
 CreateModal.propTypes = {};
 
 const mapStateToProps = (state) => {
-  const { subjects: SubjectSlice = null } = state || {};
+  const { professions: ProfessionSlice = null } = state || {};
   return {
-    SubjectSlice,
+    ProfessionSlice,
   };
 };
 
@@ -72,7 +91,7 @@ const mapDispatchToProps = (dispatch) => {
   return {
     ...bindActionCreators(
       {
-        createSubject,
+        createProfession,
       },
       dispatch
     ),

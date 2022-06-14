@@ -34,7 +34,7 @@ const CreateModal = ({ ArticleTypeSlice, createArticleType }) => {
     <Modal
       centered
       visible={visible}
-      title='Məqalə tipi əlavə etmək'
+      title='Əlavə etmək'
       okText='Təsdiqlə'
       cancelText='Çıx'
       okButtonProps={{

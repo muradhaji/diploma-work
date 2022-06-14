@@ -5,21 +5,21 @@ import useModalStatus from '../../../Hooks/useModalStatus';
 import { connect } from 'react-redux';
 import { bindActionCreators } from '@reduxjs/toolkit';
 import { normalizeFilterData } from '../../../helperFunctions';
-import { updateSubject } from '../../../Redux/Slices/SubjectSlice';
+import { updateProfession } from '../../../Redux/Slices/ProfessionSlice';
 // import PropTypes from 'prop-types';
 // import styles from './UpdateModal.module.css';
 
-const CreateModal = ({ SubjectSlice, updateSubject }) => {
-  const { updateLoading = false, selectedSubject = null } = SubjectSlice || {};
+const CreateModal = ({ ProfessionSlice, updateProfession }) => {
+  const { updateLoading = false, selectedProfession = null } =
+    ProfessionSlice || {};
 
-  const { id: selectedId = null, adi: selectedName = '' } =
-    selectedSubject || {};
+  const { id: selectedId = null, ...selectedData } = selectedProfession || {};
 
-  const { visible = false, hideModal } = useModalStatus(MODALS.SUBJECT_EDIT);
+  const { visible = false, hideModal } = useModalStatus(MODALS.PROFESSION_EDIT);
 
   useEffect(() => {
-    if (visible && selectedSubject) {
-      form.setFieldsValue({ adi: selectedName });
+    if (visible && selectedProfession) {
+      form.setFieldsValue(selectedData);
     }
     // eslint-disable-next-line
   }, [visible]);
@@ -27,8 +27,8 @@ const CreateModal = ({ SubjectSlice, updateSubject }) => {
   const [form] = Form.useForm();
 
   const handleFinish = (values) => {
-    if (selectedSubject) {
-      updateSubject(selectedId, normalizeFilterData(values));
+    if (selectedProfession) {
+      updateProfession(selectedId, normalizeFilterData(values));
     }
   };
 
@@ -46,16 +46,33 @@ const CreateModal = ({ SubjectSlice, updateSubject }) => {
       cancelText='Çıx'
       okButtonProps={{
         loading: updateLoading,
-        form: MODALS.SUBJECT_EDIT,
+        form: MODALS.PROFESSION_EDIT,
         htmlType: 'submit',
       }}
       onCancel={handleCancel}
       destroyOnClose
     >
-      <Form form={form} name={MODALS.SUBJECT_EDIT} onFinish={handleFinish}>
+      <Form
+        form={form}
+        name={MODALS.PROFESSION_EDIT}
+        onFinish={handleFinish}
+        labelCol={{ span: 4 }}
+        wrapperCol={{ span: 20 }}
+        labelAlign='left'
+      >
+        <Form.Item
+          label='Kod'
+          name='kod'
+          rules={[
+            { required: true, message: 'Bu sahə mütləq doldurulmalıdır!' },
+            { len: 6, message: 'İxtisas kodu 6 simvoldan ibarət olmalıdır!' },
+          ]}
+        >
+          <Input />
+        </Form.Item>
         <Form.Item
           label='Ad'
-          name='adi'
+          name='ad'
           rules={[
             { required: true, message: 'Bu sahə mütləq doldurulmalıdır!' },
           ]}
@@ -70,9 +87,9 @@ const CreateModal = ({ SubjectSlice, updateSubject }) => {
 CreateModal.propTypes = {};
 
 const mapStateToProps = (state) => {
-  const { subjects: SubjectSlice = null } = state || {};
+  const { professions: ProfessionSlice = null } = state || {};
   return {
-    SubjectSlice,
+    ProfessionSlice,
   };
 };
 
@@ -80,7 +97,7 @@ const mapDispatchToProps = (dispatch) => {
   return {
     ...bindActionCreators(
       {
-        updateSubject,
+        updateProfession,
       },
       dispatch
     ),

@@ -46,7 +46,7 @@ const FilterModal = ({
     <Modal
       centered
       visible={isVisible}
-      title='Müəllim filterləri'
+      title='Filterləmək'
       okText='Filterlə'
       cancelText='Çıx'
       onOk={handleOk}

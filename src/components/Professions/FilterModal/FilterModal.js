@@ -5,20 +5,22 @@ import useModalStatus from '../../../Hooks/useModalStatus';
 import { connect } from 'react-redux';
 import { bindActionCreators } from '@reduxjs/toolkit';
 import { normalizeFilterData } from '../../../helperFunctions';
-import { getFilteredSubjectsData } from '../../../Redux/Slices/SubjectSlice';
+import { getFilteredProfessionsData } from '../../../Redux/Slices/ProfessionSlice';
 // import PropTypes from 'prop-types';
 // import styles from './FilterModal.module.css';
 
-const FilterModal = ({ SubjectSlice, getFilteredSubjectsData }) => {
-  const { loading: getFilteredSubjectsDataLoading = false } =
-    SubjectSlice || {};
+const FilterModal = ({ ProfessionSlice, getFilteredProfessionsData }) => {
+  const { loading: getFilteredProfessionsDataLoading = false } =
+    ProfessionSlice || {};
 
-  const { visible = false, hideModal } = useModalStatus(MODALS.SUBJECT_FILTER);
+  const { visible = false, hideModal } = useModalStatus(
+    MODALS.PROFESSION_FILTER
+  );
 
   const [form] = Form.useForm();
 
   const handleFinish = (values) => {
-    getFilteredSubjectsData(normalizeFilterData(values));
+    getFilteredProfessionsData(normalizeFilterData(values));
   };
 
   const handleCancel = () => {
@@ -33,15 +35,25 @@ const FilterModal = ({ SubjectSlice, getFilteredSubjectsData }) => {
       okText='Təsdiqlə'
       cancelText='Çıx'
       okButtonProps={{
-        loading: getFilteredSubjectsDataLoading,
-        form: MODALS.SUBJECT_FILTER,
+        loading: getFilteredProfessionsDataLoading,
+        form: MODALS.PROFESSION_FILTER,
         htmlType: 'submit',
       }}
       onCancel={handleCancel}
       destroyOnClose
     >
-      <Form form={form} name={MODALS.SUBJECT_FILTER} onFinish={handleFinish}>
-        <Form.Item label='Ad' name='adi'>
+      <Form
+        form={form}
+        name={MODALS.PROFESSION_FILTER}
+        onFinish={handleFinish}
+        labelCol={{ span: 4 }}
+        wrapperCol={{ span: 20 }}
+        labelAlign='left'
+      >
+        <Form.Item label='Kod' name='kod'>
+          <Input />
+        </Form.Item>
+        <Form.Item label='Ad' name='ad'>
           <Input />
         </Form.Item>
       </Form>
@@ -52,9 +64,9 @@ const FilterModal = ({ SubjectSlice, getFilteredSubjectsData }) => {
 FilterModal.propTypes = {};
 
 const mapStateToProps = (state) => {
-  const { subjects: SubjectSlice = null } = state || {};
+  const { professions: ProfessionSlice = null } = state || {};
   return {
-    SubjectSlice,
+    ProfessionSlice,
   };
 };
 
@@ -62,7 +74,7 @@ const mapDispatchToProps = (dispatch) => {
   return {
     ...bindActionCreators(
       {
-        getFilteredSubjectsData,
+        getFilteredProfessionsData,
       },
       dispatch
     ),

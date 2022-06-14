@@ -4,21 +4,24 @@ import { MODALS } from '../../../constants';
 import useModalStatus from '../../../Hooks/useModalStatus';
 import { connect } from 'react-redux';
 import { bindActionCreators } from '@reduxjs/toolkit';
-import { deleteSubject } from '../../../Redux/Slices/SubjectSlice';
+import { deleteProfession } from '../../../Redux/Slices/ProfessionSlice';
 // import PropTypes from 'prop-types';
 // import styles from './DeleteModal.module.css';
 
-const CreateModal = ({ SubjectSlice, deleteSubject }) => {
-  const { deleteLoading = false, selectedSubject = null } = SubjectSlice || {};
+const CreateModal = ({ ProfessionSlice, deleteProfession }) => {
+  const { deleteLoading = false, selectedProfession = null } =
+    ProfessionSlice || {};
 
-  const { id: selectedId = null, adi: selectedName = null } =
-    selectedSubject || {};
+  const { id: selectedId = null, ad: selectedName = null } =
+    selectedProfession || {};
 
-  const { visible = false, hideModal } = useModalStatus(MODALS.SUBJECT_DELETE);
+  const { visible = false, hideModal } = useModalStatus(
+    MODALS.PROFESSION_DELETE
+  );
 
   const handleOk = () => {
     if (selectedId) {
-      deleteSubject(selectedId);
+      deleteProfession(selectedId);
     }
   };
 
@@ -38,7 +41,7 @@ const CreateModal = ({ SubjectSlice, deleteSubject }) => {
       onCancel={handleCancel}
       destroyOnClose
     >
-      {`"${selectedName}" adlı fənni silmək istədiyinizdən əminsiniz?`}
+      {`"${selectedName}" adlı ixtisası silmək istədiyinizdən əminsiniz?`}
     </Modal>
   );
 };
@@ -46,9 +49,9 @@ const CreateModal = ({ SubjectSlice, deleteSubject }) => {
 CreateModal.propTypes = {};
 
 const mapStateToProps = (state) => {
-  const { subjects: SubjectSlice = null } = state || {};
+  const { professions: ProfessionSlice = null } = state || {};
   return {
-    SubjectSlice,
+    ProfessionSlice,
   };
 };
 
@@ -56,7 +59,7 @@ const mapDispatchToProps = (dispatch) => {
   return {
     ...bindActionCreators(
       {
-        deleteSubject,
+        deleteProfession,
       },
       dispatch
     ),
