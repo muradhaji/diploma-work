@@ -14,7 +14,7 @@ const Sider = ({ collapsed }) => {
 
   const menuItems = [
     { key: '/teachers', icon: <TeamOutlined />, label: 'Müəllimlər' },
-    { key: '/articles', icon: <FileOutlined />, label: 'Məqalələr' },
+    { key: '/articles', icon: <FileOutlined />, label: 'Elmi tədqiqat işləri' },
     {
       key: '/professions',
       icon: <SettingOutlined />,
