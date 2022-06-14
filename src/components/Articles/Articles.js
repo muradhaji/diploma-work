@@ -3,18 +3,20 @@ import { Button, Empty, Space, Table, Tooltip } from 'antd';
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import { MODALS } from './../../constants';
 import PageLayout from '../PageLayout';
+import { openModal } from '../../Redux/Slices/ModalSlice';
 import {
-  toggleModal,
-  openModal,
-  closeModal,
-} from '../../Redux/Slices/ModalSlice';
-import { getArticlesData } from '../../Redux/Slices/ArticleSlice';
+  getArticlesData,
+  setSelectedArticle,
+} from '../../Redux/Slices/ArticleSlice';
 import { getArticleTypesData } from '../../Redux/Slices/ArticleTypeSlice';
 import { getTeachersData } from '../../Redux/Slices/TeacherSlice';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { find } from 'lodash';
 import FilterModal from './FilterModal';
+import CreateModal from './CreateModal';
+import UpdateModal from './UpdateModal';
+import DeleteModal from './DeleteModal';
 // import PropTypes from 'prop-types';
 // import styles from './Articles.module.css';
 
@@ -22,30 +24,22 @@ const Articles = ({
   ArticleSlice,
   ArticleTypeSlice,
   TeacherSlice,
-  toggleModal,
   openModal,
-  closeModal,
+  setSelectedArticle,
   getArticlesData,
   getArticleTypesData,
   getTeachersData,
 }) => {
-  const {
-    data: articlesData,
-    loading: getArticlesDataLoading,
-    // error,
-  } = ArticleSlice || {};
+  const { data: articlesData = null, loading: getArticlesDataLoading = false } =
+    ArticleSlice || {};
 
   const {
-    data: articleTypesData,
-    loading: getArticleTypesDataLoading,
-    // error,
+    data: articleTypesData = null,
+    loading: getArticleTypesDataLoading = false,
   } = ArticleTypeSlice || {};
 
-  const {
-    data: teachersData,
-    loading: getTeachersDataLoading,
-    // error,
-  } = TeacherSlice || {};
+  const { data: teachersData = null, loading: getTeachersDataLoading = false } =
+    TeacherSlice || {};
 
   useEffect(() => {
     getArticlesData();
@@ -74,7 +68,7 @@ const Articles = ({
       render: (teacherId) => {
         const foundItem = find(teachersData, ['id', teacherId]);
         return foundItem
-          ? `${foundItem['ad']} ${foundItem['soyad']}`
+          ? `${foundItem['ad']} ${foundItem['soyad']} ${foundItem['ata_adi']}`
           : teacherId;
       },
     },
@@ -121,13 +115,16 @@ const Articles = ({
       key: 'actions',
       title: 'Düymələr',
       fixed: 'right',
-      render: ({ id }) => (
+      render: (record) => (
         <Space>
           <Tooltip title='Redaktə et'>
             <Button
               type='primary'
               icon={<EditOutlined />}
-              onClick={() => console.log(`Edit article: ${id}`)}
+              onClick={() => {
+                setSelectedArticle(record);
+                openModal(MODALS.ARTICLE_EDIT);
+              }}
             />
           </Tooltip>
           <Tooltip title='Sil'>
@@ -135,7 +132,10 @@ const Articles = ({
               type='primary'
               danger
               icon={<DeleteOutlined />}
-              onClick={() => console.log(`Delete article: ${id}`)}
+              onClick={() => {
+                setSelectedArticle(record);
+                openModal(MODALS.ARTICLE_DELETE);
+              }}
             />
           </Tooltip>
         </Space>
@@ -157,10 +157,10 @@ const Articles = ({
 
   const pageButtons = (
     <>
-      <Button type='primary' onClick={() => toggleModal(MODALS.ARTICLE_FILTER)}>
+      <Button type='primary' onClick={() => openModal(MODALS.ARTICLE_FILTER)}>
         Filterlə
       </Button>
-      <Button type='primary' onClick={() => toggleModal(MODALS.ARTICLE_CREATE)}>
+      <Button type='primary' onClick={() => openModal(MODALS.ARTICLE_CREATE)}>
         Əlavə et
       </Button>
     </>
@@ -169,6 +169,9 @@ const Articles = ({
   const pageContent = (
     <>
       <FilterModal />
+      <CreateModal />
+      <UpdateModal />
+      <DeleteModal />
       <Table
         bordered
         size='small'
@@ -220,9 +223,8 @@ const mapDispatchToProps = (dispatch) => {
   return {
     ...bindActionCreators(
       {
-        toggleModal,
         openModal,
-        closeModal,
+        setSelectedArticle,
         getArticlesData,
         getArticleTypesData,
         getTeachersData,
