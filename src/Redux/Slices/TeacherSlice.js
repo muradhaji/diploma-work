@@ -171,8 +171,9 @@ export const getTeachersData =
       .then(({ data }) => {
         dispatch(getTeachersDataSucceeded(data));
       })
-      .catch(({ message }) => {
-        dispatch(getTeachersDataFailed(message));
+      .catch(({ message: errMessage }) => {
+        message.error(errMessage);
+        dispatch(getTeachersDataFailed(errMessage));
       });
   };
 

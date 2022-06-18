@@ -164,8 +164,9 @@ export const getArticleTypesData =
       .then(({ data }) => {
         dispatch(getArticleTypesDataSucceeded(data));
       })
-      .catch(({ message }) => {
-        dispatch(getArticleTypesDataFailed(message));
+      .catch(({ message: errMessage }) => {
+        message.error(errMessage);
+        dispatch(getArticleTypesDataFailed(errMessage));
       });
   };
 

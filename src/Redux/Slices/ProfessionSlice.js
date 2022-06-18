@@ -162,8 +162,9 @@ export const getProfessionsData =
       .then(({ data }) => {
         dispatch(getProfessionsDataSucceeded(data));
       })
-      .catch(({ message }) => {
-        dispatch(getProfessionsDataFailed(message));
+      .catch(({ message: errMessage }) => {
+        message.error(errMessage);
+        dispatch(getProfessionsDataFailed(errMessage));
       });
   };
 
